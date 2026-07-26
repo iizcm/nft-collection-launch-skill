@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROJECTNAME</title>
+<style>
+  :root{
+    --lime:#CCFF00; --dark:#0a0e00; --panel:rgba(10,14,0,.88);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--lime);color:var(--dark);overflow-x:hidden}
+  .grid-bg{position:fixed;inset:0;z-index:-2;
+    background:linear-gradient(rgba(10,14,0,.08) 1px,transparent 1px),
+              linear-gradient(90deg,rgba(10,14,0,.08) 1px,transparent 1px);
+    background-size:44px 44px;animation:pan 24s linear infinite}
+  @keyframes pan{from{background-position:0 0}to{background-position:44px 44px}}
+  .glow{position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 50% 0%,rgba(204,255,0,.5),transparent 60%)}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;
+    background:var(--panel);border-bottom:2px solid var(--dark);position:sticky;top:0;z-index:50}
+  nav .brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:20px;color:var(--lime);text-shadow:0 0 8px var(--lime)}
+  nav .brand img{width:30px;height:30px;border-radius:8px;border:2px solid var(--dark)}
+  nav .links a{color:var(--lime);text-decoration:none;margin-left:18px;font-weight:700;font-size:13px}
+  .hero{max-width:1100px;margin:0 auto;padding:40px 20px 10px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+  .hero .txt{flex:1;min-width:260px}
+  .hero h1{font-size:clamp(34px,6vw,68px);font-weight:900;letter-spacing:2px;line-height:.95;text-shadow:0 0 18px rgba(204,255,0,.9)}
+  .hero p{margin-top:10px;font-weight:700;letter-spacing:1px;font-size:15px}
+  .hero .banner{flex:1;min-width:280px;border:2px solid var(--dark);border-radius:14px;overflow:hidden}
+  .hero .banner img{width:100%;display:block}
+  .stats{max-width:1100px;margin:18px auto;padding:0 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .stat{background:var(--panel);border:2px solid var(--dark);border-radius:12px;padding:16px;text-align:center}
+  .stat .k{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+  .stat .v{font-size:24px;font-weight:900;color:var(--lime);text-shadow:0 0 8px var(--lime);margin-top:4px}
+  .mint-card{max-width:1100px;margin:24px auto;padding:0 20px}
+  .card{background:var(--panel);border:2px solid var(--dark);border-radius:16px;padding:24px;
+    display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .card .info{flex:1;min-width:240px}
+  .card .info h3{font-size:22px;font-weight:900;color:var(--lime);letter-spacing:1px}
+  .card .info p{margin-top:8px;font-size:14px;font-weight:600;line-height:1.5}
+  .card .meta{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
+  .card .meta div{font-size:12px;font-weight:700}
+  .card .meta span{color:var(--lime)}
+  .btn{display:inline-block;padding:16px 40px;font-size:18px;font-weight:900;letter-spacing:1px;
+    background:var(--dark);color:var(--lime);border:3px solid var(--lime);border-radius:40px;
+    text-decoration:none;box-shadow:0 0 24px rgba(204,255,0,.6);transition:.2s;cursor:pointer;white-space:nowrap}
+  .btn:hover{transform:scale(1.04);background:var(--lime);color:var(--dark);box-shadow:0 0 40px var(--lime)}
+  .section{max-width:1100px;margin:36px auto 10px;padding:0 20px}
+  .section h2{font-size:24px;font-weight:900;letter-spacing:2px;margin-bottom:14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+  .gcard{background:var(--panel);border:2px solid var(--dark);border-radius:12px;overflow:hidden;transition:.2s}
+  .gcard:hover{transform:translateY(-5px);box-shadow:0 0 22px var(--lime)}
+  .gcard img{width:100%;display:block;background:#000}
+  .gcard .cap{padding:8px 10px;font-size:12px;font-weight:700;letter-spacing:1px;color:var(--lime);text-align:center}
+  footer{margin-top:40px;background:var(--panel);border-top:2px solid var(--dark);text-align:center;padding:24px;color:var(--lime);font-weight:700;letter-spacing:1px}
+  footer a{color:#fff;text-decoration:none}
+  .floaty{position:fixed;bottom:16px;right:16px;background:var(--dark);color:var(--lime);border:2px solid var(--lime);padding:9px 16px;border-radius:28px;font-weight:800;z-index:60;box-shadow:0 0 18px var(--lime);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+  @media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div><div class="glow"></div>
+<nav>
+  <div class="brand"><img src="logo_500.png">PROJECTNAME</div>
+  <div class="links"><a href="#mint">MINT</a><a href="#gallery">GALLERY</a><a href="https://opensea.io/collection/PROJECTSLUG" target="_blank">OPENSEA</a></div>
+</nav>
+<section class="hero">
+  <div class="txt"><h1>PROJECTNAME</h1><p>TAGLINE · CHAIN</p></div>
+  <div class="banner"><img src="banner_1500x500.png"></div>
+</section>
+<div class="stats">
+  <div class="stat"><div class="k">Supply</div><div class="v">SUPPLY</div></div>
+  <div class="stat"><div class="k">Chain</div><div class="v">RBH 4663</div></div>
+  <div class="stat"><div class="k">Network Color</div><div class="v">#CCFF00</div></div>
+  <div class="stat"><div class="k">Status</div><div class="v">Mint Live</div></div>
+</div>
+<div class="mint-card" id="mint"><div class="card">
+  <div class="info"><h3>Mint</h3><p>BIO</p>
+    <div class="meta"><div>Supply: <span>SUPPLY</span></div><div>Freemint: <span>LIVE</span></div><div>Paid: <span>SOON</span></div></div>
+  </div>
+  <a class="btn" href="https://opensea.io/collection/PROJECTSLUG" target="_blank">MINT NOW</a>
+</div></div>
+<div class="section" id="gallery"><h2>Gallery</h2><div class="grid" id="gal"></div></div>
+<footer>Powered by Robinhood Chain · <a href="https://opensea.io/collection/PROJECTSLUG" target="_blank">OpenSea</a></footer>
+<div class="floaty">GM</div>
+<script>
+  // auto-populate gallery from char_XX.png 01..10
+  const gal=document.getElementById('gal');
+  for(let i=1;i<=10;i++){const n=String(i).padStart(2,'0');
+    gal.insertAdjacentHTML('beforeend',`<div class="gcard"><img src="chars/char_${n}.png"><div class="cap">#${n}</div></div>`);}
+</script>
+</body>
+</html>
