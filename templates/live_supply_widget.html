@@ -1,0 +1,69 @@
+<!-- ============================================================
+     LIVE SUPPLY WIDGET  (drop-in for NFT launch sites)
+     - Pure client-side: fetches totalSupply() via JSON-RPC eth_call
+       straight from the chain RPC (RBH RPC allows browser CORS).
+     - No backend, no API key. Updates every 15s.
+     - Edit CONTRACT / MAX / FREE_CAP / MINT_START per project.
+     ============================================================ -->
+
+<!-- 1) CSS (paste inside <style>) -->
+<style>
+.live{margin-top:26px;border:2px solid var(--lime);border-radius:8px;padding:18px;background:#0c0c0c;}
+.live-row{display:flex;align-items:baseline;gap:10px;margin-bottom:8px;font-size:15px;}
+.live-row .lbl{color:#aef;letter-spacing:1px;min-width:120px;}
+.live-row .val{font-size:26px;font-weight:bold;color:#fff;}
+.live-row .max{color:#5a7a00;font-size:13px;}
+.bar{height:14px;background:#222;border-radius:7px;overflow:hidden;margin:6px 0 14px;border:1px solid #333;}
+.bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#9ad900,#CCFF00);transition:width .6s;}
+.count{font-size:15px;color:#CCFF00;letter-spacing:1px;text-align:center;margin-top:6px;}
+</style>
+
+<!-- 2) HTML (paste where you want the widget) -->
+<div class="live" id="live">
+  <div class="live-row"><span class="lbl">LIVE SUPPLY</span><span class="val" id="supply">…</span><span class="max">/ 3,333</span></div>
+  <div class="bar"><div class="bar-fill" id="barfill"></div></div>
+  <div class="live-row"><span class="lbl">FREE LEFT</span><span class="val" id="freeleft">…</span><span class="max">/ 1,667</span></div>
+  <div class="count" id="countdown">CHECKING MINT STATUS…</div>
+</div>
+
+<!-- 3) JS (paste before </body>) -->
+<script>
+// === LIVE SUPPLY WIDGET ===
+const CONTRACT = "0xa697333b6589e9fdab36bbd220b1871d5fb0b35d"; // <-- project NFT contract
+const MAX = 3333;        // total supply
+const FREE_CAP = 1667;   // free-mint allocation (e.g. 50% of MAX)
+const RPC = "https://rpc.mainnet.chain.robinhood.com/"; // <-- chain RPC (must allow CORS)
+// Set ISO start time for a countdown, e.g. "2026-07-20T12:00:00Z". Empty = LIVE NOW.
+const MINT_START = "";
+
+const ENC = "0x18160ddd"; // totalSupply()
+async function getSupply(){
+  const r = await fetch(RPC,{
+    method:"POST",headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({jsonrpc:"2.0",id:1,method:"eth_call",params:[{to:CONTRACT,data:ENC},"latest"]})
+  });
+  const j = await r.json();
+  if(!j.result) return 0;
+  return parseInt(j.result,16);
+}
+function pad(n){return String(n).padStart(2,"0");}
+function tickCount(){
+  const el = document.getElementById("countdown");
+  if(!MINT_START){ el.textContent = "🟢 MINT IS LIVE — FIRST COME FIRST SERVED"; return; }
+  const t = new Date(MINT_START).getTime() - Date.now();
+  if(t<=0){ el.textContent = "🟢 MINT IS LIVE — GO!"; return; }
+  const d=Math.floor(t/864e5),h=Math.floor(t%864e5/36e5),m=Math.floor(t%36e5/6e4),s=Math.floor(t%6e4/1e3);
+  el.textContent = `MINT OPENS IN ${d}d ${pad(h)}:${pad(m)}:${pad(s)}`;
+}
+async function refresh(){
+  try{
+    const sup = await getSupply();
+    document.getElementById("supply").textContent = sup.toLocaleString();
+    document.getElementById("barfill").style.width = Math.min(100, sup/MAX*100) + "%";
+    const freeLeft = Math.max(0, FREE_CAP - sup);
+    document.getElementById("freeleft").textContent = freeLeft.toLocaleString();
+  }catch(e){ document.getElementById("supply").textContent = "ERR"; }
+  tickCount();
+}
+refresh(); setInterval(refresh, 15000);
+</script>
